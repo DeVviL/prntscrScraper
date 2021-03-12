@@ -7,7 +7,7 @@ if len(sys.argv) < 2:
     sys.exit("\033[37mUsage: python3 " + sys.argv[0] + " (Number of threads)")
 THREAD_AMOUNT = int(sys.argv[1])
 
-INVALID = [0, 503, 5082, 4939, 4940, 4941, 12003, 5556, 4540, 5296]
+INVALID = [0, 503, 5296]
 
 def scrape_pictures(thread):
     while True:
