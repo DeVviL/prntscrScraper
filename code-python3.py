@@ -32,7 +32,7 @@ def scrape_pictures(thread):
             try:
                 out = open(filename, 'wb')
             except:
-                os.mkdir('photos')
+                os.mkdir('scraped-photos')
                 out = open(filename, 'wb')
             out.write(content)
             out.close()
