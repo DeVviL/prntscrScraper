@@ -1,4 +1,5 @@
-#Credits to 'nazarpechka' for helping out with this code
+# Credits to 'nazarpechka' for helping out with this code
+# 'DeVviL' was update for more random
 
 import string, random, os, sys, _thread, httplib2, time
 # from PIL import Image
@@ -13,36 +14,33 @@ def scrape_pictures(thread):
     while True:
         #url = 'http://img.prntscr.com/img?url=http://i.imgur.com/'
         url = 'http://i.imgur.com/'
-        length = random.choice((5, 6))
+        length = random.randint(5, 7)
+        letter = random.randint(1, length)
+        url += ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(letter))
+        url += ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(length - letter))
+        url += '.jpg'
+        # print (url)
+
         file_path = 'scraped-photos/'
-        if length == 5:
-            url += ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(5))
+        filename = file_path+url.rsplit('/', 1)[-1]
+        # print (filename)
+
+        h = httplib2.Http('.cache' + thread)
+        response, content = h.request(url)
+        try:
+            out = open(filename, 'wb')
+        except:
+            os.mkdir('scraped-photos')
+            out = open(filename, 'wb')
+        out.write(content)
+        out.close()
+
+        file_size = os.path.getsize(filename)
+        if file_size in INVALID:
+            print("[-] Invalid: " + url)
+            os.remove(filename)
         else:
-            url += ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(3))
-            url += ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(3))
-            url += '.jpg'
-            # print (url)
-
-
-            filename = file_path+url.rsplit('/', 1)[-1]
-            # print (filename)
-
-            h = httplib2.Http('.cache' + thread)
-            response, content = h.request(url)
-            try:
-                out = open(filename, 'wb')
-            except:
-                os.mkdir('scraped-photos')
-                out = open(filename, 'wb')
-            out.write(content)
-            out.close()
-
-            file_size = os.path.getsize(filename)
-            if file_size in INVALID:
-                print("[-] Invalid: " + url)
-                os.remove(filename)
-            else:
-                print("[+] Valid: " + url)
+            print("[+] Valid: " + url)
 
 for thread in range(1, THREAD_AMOUNT + 1):
     thread = str(thread)
