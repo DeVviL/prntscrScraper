@@ -1,8 +1,8 @@
 # Credits to 'nazarpechka' for helping out with this code
-# 'DeVviL' was update for more random
+# 'DeVviL' was update for more random and fix file extension
 
 import string, random, os, sys, _thread, httplib2, time
-# from PIL import Image
+from PIL import Image
 
 if len(sys.argv) < 2:
     sys.exit("\033[37mUsage: python3 " + sys.argv[0] + " (Number of threads)")
@@ -41,6 +41,23 @@ def scrape_pictures(thread):
             os.remove(filename)
         else:
             print("[+] Valid: " + url)
+
+            try:
+                img = Image.open(filename)
+                format = img.format
+                img.close()
+
+                if format == "JPEG":
+                    if img not in ('.jpg', '.jpeg'):
+                        os.rename(filename, os.path.splitext(filename)[0] + ".jpg")
+                if format == "PNG":
+                    if img != '.png':
+                        os.rename(filename, os.path.splitext(filename)[0] + ".png")
+                if format == "GIF":
+                    if img != '.gif':
+                        os.rename(filename, os.path.splitext(filename)[0] + ".gif")
+            except IOError:
+                pass
 
 for thread in range(1, THREAD_AMOUNT + 1):
     thread = str(thread)
