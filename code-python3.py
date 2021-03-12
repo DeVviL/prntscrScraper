@@ -47,9 +47,6 @@ def scrape_pictures(thread):
                 format = img.format
                 img.close()
 
-                if format == "JPEG":
-                    if img not in ('.jpg', '.jpeg'):
-                        os.rename(filename, os.path.splitext(filename)[0] + ".jpg")
                 if format == "PNG":
                     if img != '.png':
                         os.rename(filename, os.path.splitext(filename)[0] + ".png")
@@ -57,7 +54,7 @@ def scrape_pictures(thread):
                     if img != '.gif':
                         os.rename(filename, os.path.splitext(filename)[0] + ".gif")
             except IOError:
-                pass
+                os.remove(filename)
 
 for thread in range(1, THREAD_AMOUNT + 1):
     thread = str(thread)
