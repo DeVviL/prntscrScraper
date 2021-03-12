@@ -14,6 +14,7 @@ def scrape_pictures(thread):
         #url = 'http://img.prntscr.com/img?url=http://i.imgur.com/'
         url = 'http://i.imgur.com/'
         length = random.choice((5, 6))
+        file_path = 'scraped-photos/'
         if length == 5:
             url += ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(5))
         else:
@@ -23,12 +24,16 @@ def scrape_pictures(thread):
             # print (url)
 
 
-            filename = url.rsplit('/', 1)[-1]
+            filename = file_path+url.rsplit('/', 1)[-1]
             # print (filename)
 
             h = httplib2.Http('.cache' + thread)
             response, content = h.request(url)
-            out = open(filename, 'wb')
+            try:
+                out = open(filename, 'wb')
+            except:
+                os.mkdir('photos')
+                out = open(filename, 'wb')
             out.write(content)
             out.close()
 
