@@ -10,6 +10,11 @@ THREAD_AMOUNT = int(sys.argv[1])
 
 INVALID = [0, 503, 5296]
 
+try:
+    os.mkdir('scraped-photos')
+except:
+    pass
+
 def scrape_pictures(thread):
     while True:
         #url = 'http://img.prntscr.com/img?url=http://i.imgur.com/'
@@ -27,11 +32,7 @@ def scrape_pictures(thread):
 
         h = httplib2.Http('.cache' + thread)
         response, content = h.request(url)
-        try:
-            out = open(filename, 'wb')
-        except:
-            os.mkdir('scraped-photos')
-            out = open(filename, 'wb')
+        out = open(filename, 'wb')
         out.write(content)
         out.close()
 
